@@ -31,13 +31,9 @@ flowchart TB
     reconnect --> standby
 ```
 
-## Pengujian yang Disarankan
+## Perangkat Prototipe
 
-- Recall Omega pada variasi pembicara, jarak, tempo, dan kebisingan.
-- False activations per hour pada audio negatif kontinu.
-- Recovery setelah Wi-Fi terputus dan setelah reboot.
-- Sinkronisasi LED dengan state sesi.
-- Kualitas audio 16 kHz mono pada perangkat ReSpeaker asli.
-
-!!! info "Screenshot yang dibutuhkan"
-    Tambahkan foto Raspberry Pi, ReSpeaker, dan LED. Pastikan tidak ada label jaringan atau kredensial yang terlihat.
+<figure markdown="span">
+  ![Raspberry Pi dengan ReSpeaker dan LED status SmartLab](../assets/photos/raspberry-pi-respeaker-led.png)
+  <figcaption>Raspberry Pi 3B, ReSpeaker 2-Mic HAT, dan LED status yang digunakan pada perangkat suara SmartLab.</figcaption>
+</figure>

@@ -58,14 +58,6 @@ Token memeriksa identitas aplikasi yang mengirim permintaan. Pembatasan IP menen
 - **Pembatasan IP** menambah perlindungan jaringan, tetapi perlu diperbarui ketika alamat berubah.
 - **TLS/WSS** mengenkripsi koneksi; token dan pembatasan IP tidak menggantikan enkripsi.
 
-## Penguatan Keamanan Berikutnya
-
-- Tambahkan batas jumlah dan ukuran permintaan.
-- Buka layanan internal hanya pada antarmuka jaringan yang diperlukan.
-- Ganti kredensial lama secara terkontrol.
-- Gunakan token pengujian terpisah untuk pentest dan cabut setelah pengujian.
-- Hubungkan catatan antar-layanan menggunakan `trace_id` tanpa menyimpan nilai rahasia.
-
 ## Aturan Publikasi
 
 Dokumentasi publik tidak boleh memuat:

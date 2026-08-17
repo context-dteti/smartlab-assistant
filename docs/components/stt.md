@@ -24,12 +24,8 @@ Layanan Speech-to-Text menerima potongan audio PCM dari Raspberry Pi, mendeteksi
 | STT → client | `AI_REPLY:<text>` | Mengirim jawaban akhir untuk status sesi |
 | STT → n8n | JSON query | Memulai workflow orkestrasi |
 
-## Penanganan Kegagalan
+## Jika Transkripsi Tidak Berhasil
 
-- Transkrip kosong tidak boleh memanggil aktuator.
-- Kegagalan webhook harus menghasilkan pesan yang jelas dan tidak boleh mengulang aktuasi tanpa batas.
-- Token WebSocket divalidasi saat handshake.
-- Ukuran audio harus dibatasi agar kiriman yang terlalu besar dapat ditolak.
+Jika suara tidak terdengar jelas atau hasil transkripsi kosong, sesi diakhiri tanpa menjalankan perintah perangkat. Raspberry Pi kemudian kembali ke mode siaga agar pengguna dapat mencoba lagi.
 
-!!! info "Screenshot yang dibutuhkan"
-    Tambahkan cuplikan log anonim: model berhasil dimuat, WebSocket diterima, dan satu transkripsi berhasil. Hapus hostname, IP, token, dan path home.
+Jika hasil transkripsi tidak dapat diteruskan ke n8n, sistem memberi tahu pengguna bahwa permintaan belum berhasil dan tidak mengulangi perintah secara otomatis. Koneksi yang tidak valid ditolak sebelum audio diproses, sedangkan rekaman yang terlalu panjang dihentikan dengan aman.

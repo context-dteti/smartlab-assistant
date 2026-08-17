@@ -48,3 +48,20 @@
   color: var(--md-default-fg-color--light);
   max-width: 54rem;
 }
+
+.md-typeset .compact-diagram {
+  margin: 1rem auto 1.5rem;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.md-typeset .compact-diagram .mermaid {
+  min-width: 44rem;
+  text-align: center;
+}
+
+.md-typeset .compact-diagram .mermaid svg {
+  height: auto;
+  max-height: 24rem;
+  max-width: 100%;
+}

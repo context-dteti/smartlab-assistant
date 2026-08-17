@@ -28,6 +28,3 @@ Piper TTS mengubah jawaban akhir menjadi audio WAV. Model tetap berada di memori
 | Token tidak ada/salah | Permintaan ditolak |
 | Teks kosong | Ditolak atau dilewati tanpa file rusak |
 | Pemutaran | Audio terdengar satu kali tanpa pengulangan aktuasi |
-
-!!! info "Screenshot yang dibutuhkan"
-    Tambahkan foto speaker dan satu cuplikan waveform atau pemutar audio hasil sintesis. Jangan tampilkan path home atau header autentikasi.

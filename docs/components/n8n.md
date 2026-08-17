@@ -6,29 +6,25 @@ n8n mengatur alur dari teks hasil STT sampai jawaban suara. Di sinilah status pe
 
 ## Alur keputusan
 
-```mermaid
-flowchart TB
-    accTitle: Alur Keputusan n8n
-    accDescr: Jalur dari input, pembacaan status perangkat, keputusan SLM, pemeriksaan hasil, pengendalian perangkat, sampai penyimpanan audio
+<div class="compact-diagram" markdown>
 
-    input([Manual atau webhook]) --> normalize[Normalisasi input]
-    normalize --> states[Ambil status dari Home Assistant]
-    states --> context[Bangun konteks]
-    context --> inference[Panggil SLM lokal]
-    inference --> validate{Proposal valid?}
-    validate -->|Tidak| response[Bentuk respons]
-    validate -->|Ya| dry_run{Mode uji tanpa aktuasi?}
-    dry_run -->|Ya| response
-    dry_run -->|Tidak| service_data{Ada parameter tambahan?}
-    service_data -->|Ya| call_data[Jalankan layanan dengan parameter]
-    service_data -->|Tidak| call_basic[Jalankan layanan dasar]
-    call_data --> mark[Catat layanan dipanggil]
-    call_basic --> mark
-    mark --> response
-    response --> sanitize[Sanitasi teks TTS]
-    sanitize --> tts[Panggil Piper TTS]
-    tts --> wav([Simpan WAV])
+```mermaid
+flowchart LR
+    accTitle: Alur Keputusan n8n
+    accDescr: Ringkasan enam tahap utama dari penerimaan teks hingga jawaban suara; rincian setiap node tersedia pada tabel di bawah diagram
+
+    input([Terima teks]) --> context[Ambil status dan<br/>bangun konteks]
+    context --> inference[Panggil SLM]
+    inference --> validate{Hasil valid?}
+    validate -->|Aksi| execute[Jalankan melalui<br/>Home Assistant]
+    validate -->|Tanpa aksi| response[Bentuk jawaban]
+    execute --> response
+    response --> tts([Buat audio TTS])
 ```
+
+</div>
+
+Diagram hanya menampilkan tahap utama agar mudah dibaca pada satu layar. Percabangan mode uji, pemeriksaan parameter, dan seluruh node teknis dijelaskan pada tabel berikut.
 
 ## Fungsi setiap node
 
@@ -57,13 +53,25 @@ flowchart TB
 
 Sebelum perintah dijalankan, n8n memeriksa jumlah aksi, nama fungsi, perangkat tujuan, jenis nilai, dan batas nilainya. Hanya hasil yang lolos pemeriksaan yang diterjemahkan menjadi layanan atau scene Home Assistant.
 
-!!! warning "Catatan pengembangan"
-    Pembentukan konteks dan aturan `HassLightSet` perlu tetap sama dengan kontrak dataset. Tujuannya agar satu permintaan perubahan lampu tidak berubah makna ketika diteruskan ke Home Assistant.
+## Tampilan Workflow
 
-## Screenshot yang Dibutuhkan
+<figure markdown="span">
+  ![Tampilan lengkap workflow n8n SmartLab](../assets/screenshots/n8n-workflow-overview.png)
+  <figcaption>Workflow utama n8n dari penerimaan input hingga pembuatan jawaban suara.</figcaption>
+</figure>
 
-!!! info "Placeholder — tampilan alur n8n"
-    Tambahkan screenshot seluruh canvas n8n dengan kelompok **Input**, **Context & Decision**, **Safety & Execution**, dan **Response & TTS** terlihat. Samarkan ID kredensial, URL privat, token, dan data eksekusi.
+### Pembentukan konteks
 
-!!! info "Placeholder — node penting"
-    Tambahkan screenshot parameter dari `Code - Build Context`, `HTTP Request - Local SLM`, `Code - Parse and Validate`, dan `Code - Final Response`. Gunakan data contoh anonim.
+<figure markdown="span">
+  ![Node Build Context pada workflow n8n](../assets/screenshots/n8n-build-context.png)
+  <figcaption>Node <code>Build Context</code> menyusun kondisi perangkat yang relevan sebelum permintaan dikirim ke SLM.</figcaption>
+</figure>
+
+### Pemeriksaan hasil model
+
+<figure markdown="span">
+  ![Node Parse and Validate pada workflow n8n](../assets/screenshots/n8n-parse-and-validate.png)
+  <figcaption>Node <code>Parse and Validate</code> memeriksa hasil model sebelum perintah diteruskan ke Home Assistant.</figcaption>
+</figure>
+
+Panel data pada kedua tampilan node disamarkan agar informasi runtime tidak ditampilkan dalam dokumentasi publik.

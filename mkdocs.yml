@@ -54,7 +54,6 @@ nav:
   - Referensi:
       - Endpoint dan Format Data: reference/api-endpoints.md
       - Glosarium: reference/glossary.md
-      - Daftar Gambar: reference/media-checklist.md
 
 plugins:
   - search

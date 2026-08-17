@@ -27,6 +27,3 @@ Nilai yang tidak tersedia tidak boleh diganti dengan angka buatan karena dapat m
 ## Verifikasi
 
 Respons API menunjukkan bahwa Home Assistant menerima perintah. Untuk memastikan perubahan benar-benar terjadi, perangkat perlu diamati atau statusnya dibaca kembali setelah aktuasi.
-
-!!! info "Screenshot yang dibutuhkan"
-    Tambahkan dashboard Home Assistant yang hanya menampilkan entitas SmartLab. Hindari menu credential, token, alamat internal, dan integrasi administratif.

@@ -22,35 +22,6 @@ Urutan proses:
   <figcaption>n8n membaca kondisi perangkat, meminta keputusan dari SLM, memeriksa hasilnya, menjalankan aksi yang valid, dan membuat jawaban suara.</figcaption>
 </figure>
 
-```mermaid
-sequenceDiagram
-    accTitle: Siklus Permintaan SmartLab
-    accDescr: Urutan komunikasi n8n dengan Home Assistant, SLM lokal, dan Piper TTS untuk satu permintaan pengguna
-
-    participant N as n8n
-    participant H as Home Assistant
-    participant S as SLM lokal
-    participant T as Piper TTS
-
-    N->>H: Ambil status perangkat
-    H-->>N: Status dan atribut
-    N->>N: Pilih perangkat yang diizinkan dan buat konteks
-    N->>S: Kirim konteks, permintaan, dan daftar fungsi
-    S-->>N: Jawaban teks dan fungsi bila diperlukan
-    N->>N: Baca dan periksa hasil
-
-    alt Perintah dapat dijalankan
-        N->>H: Panggil scene atau layanan
-        H-->>N: Hasil pemanggilan layanan
-    else Tanpa aksi, ditolak, atau mode uji
-        N->>N: Tidak mengubah perangkat
-    end
-
-    N->>N: Bentuk respons final
-    N->>T: Kirim teks tersanitasi
-    T-->>N: Audio WAV
-```
-
 ## Status yang Dilihat Pengguna
 
 | Status | Indikator | Makna |
