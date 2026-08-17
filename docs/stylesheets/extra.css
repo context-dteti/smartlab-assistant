@@ -1,0 +1,50 @@
+:root {
+  --md-primary-fg-color: #223b73;
+  --md-accent-fg-color: #1976d2;
+}
+
+.md-header__title {
+  font-weight: 700;
+}
+
+.md-typeset h1 {
+  color: var(--md-default-fg-color);
+  font-size: 2rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.md-typeset h2 {
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  font-size: 1.45rem;
+  font-weight: 700;
+  padding-bottom: 0.25rem;
+}
+
+.md-typeset h3 {
+  font-weight: 700;
+}
+
+.md-nav__title,
+.md-nav__item--section > .md-nav__link {
+  color: var(--md-default-fg-color);
+  font-weight: 700;
+}
+
+.md-nav__link--active {
+  font-weight: 700;
+}
+
+.md-typeset .hero-copy {
+  font-size: 1.12rem;
+  max-width: 52rem;
+}
+
+.md-typeset figure {
+  margin: 1.5rem auto;
+}
+
+.md-typeset figcaption {
+  color: var(--md-default-fg-color--light);
+  max-width: 54rem;
+}
