@@ -1,54 +1,54 @@
-# Deployment dan Rollback
+# Pemasangan Model dan Pemulihan
 
-## Prinsip deployment
+## Prinsip Dasar
 
-Deployment model harus menjadi perubahan kecil, dapat diverifikasi, dan dapat dibatalkan. Mengganti model tidak semestinya mengubah endpoint, credential, workflow n8n, STT, TTS, atau Home Assistant pada saat yang sama.
+Pemasangan model dilakukan sebagai perubahan tersendiri agar mudah diperiksa dan dibatalkan. Saat model diganti, alamat layanan, kredensial, alur n8n, STT, TTS, dan Home Assistant tetap menggunakan konfigurasi yang sama.
 
-## Artifact yang dipromosikan
+## Berkas yang Disiapkan
 
-Satu paket kandidat sekurang-kurangnya memuat:
+Satu paket model sekurang-kurangnya memuat:
 
 - File GGUF dengan nama stabil.
-- Manifest provenance dan checksum SHA-256.
-- Konfigurasi conversion/quantization.
-- Metrics frozen test HF dan Q4 yang terpisah.
-- Hasil preflight `llama-server` dan smoke test.
-- Catatan model sebelumnya untuk rollback.
+- Catatan asal model dan checksum SHA-256.
+- Konfigurasi konversi dan kuantisasi.
+- Hasil evaluasi model HF dan Q4 yang terpisah.
+- Hasil uji pemuatan `llama-server` dan uji fungsi singkat.
+- Salinan model sebelumnya untuk pemulihan.
 
-## Urutan promosi
+## Urutan Pemasangan
 
-1. Verifikasi checksum artifact sumber dan tujuan.
-2. Jalankan preflight load tanpa mengubah service aktif.
-3. Backup unit service dan catat path model lama.
-4. Ubah hanya path model pada konfigurasi service.
-5. Reload systemd dan restart layanan inference.
-6. Periksa health endpoint serta log load GPU.
-7. Jalankan dry-run explicit, status, implicit, already-state, dan refusal.
-8. Jalankan smoke test fisik terkontrol.
-9. Pantau false execution, rejection, latensi, dan respons audio.
+1. Cocokkan checksum file sumber dan tujuan.
+2. Pastikan model dapat dimuat tanpa mengubah layanan aktif.
+3. Cadangkan konfigurasi layanan dan catat lokasi model lama.
+4. Ubah hanya lokasi model pada konfigurasi layanan.
+5. Muat ulang konfigurasi dan mulai ulang layanan SLM.
+6. Periksa status layanan dan log pemuatan GPU.
+7. Uji perintah eksplisit, status, implisit, kondisi yang sudah sesuai, dan penolakan tanpa aktuasi perangkat.
+8. Lakukan satu uji fisik yang aman dan terkontrol.
+9. Pantau kesalahan aktuasi, penolakan, waktu respons, dan keluaran suara.
 
-## Rollback konseptual
+## Cara Memulihkan Model Sebelumnya
 
 ```text
-1. Hentikan penerimaan request baru.
-2. Pulihkan unit service yang menunjuk model stabil sebelumnya.
-3. Reload systemd dan restart inference service.
-4. Verifikasi health serta checksum model aktif.
-5. Jalankan smoke test read-only dan satu aktuasi aman.
-6. Catat alasan rollback dan evidence regresi.
+1. Hentikan sementara permintaan baru.
+2. Kembalikan konfigurasi ke model stabil sebelumnya.
+3. Muat ulang konfigurasi dan mulai ulang layanan SLM.
+4. Periksa status layanan dan checksum model aktif.
+5. Uji pembacaan status dan satu aktuasi yang aman.
+6. Catat alasan pemulihan dan hasil pemeriksaan.
 ```
 
-Perintah konkret, alamat host, username, dan path internal disimpan pada runbook privat, bukan dokumentasi web publik.
+Perintah lengkap, alamat perangkat, nama pengguna, dan lokasi file internal disimpan dalam panduan privat, bukan pada dokumentasi web publik.
 
-## Kondisi yang memicu rollback
+## Kapan Model Perlu Dikembalikan
 
-- Model gagal dimuat atau health check tidak stabil.
-- Native tool call turun jauh dari baseline yang disetujui.
-- Terjadi false execution pada uji safety.
+- Model gagal dimuat atau layanan tidak stabil.
+- Akurasi pemanggilan fungsi turun jauh dari hasil acuan.
+- Terjadi aktuasi pada contoh yang seharusnya tidak menjalankan perangkat.
 - Validator menerima argumen di luar kontrak.
-- Latensi atau penggunaan memori mengganggu service lain.
+- Waktu respons atau penggunaan memori mengganggu layanan lain.
 - TTS gagal dan menimbulkan pengulangan alur yang tidak aman.
 
-## Backup
+## Cadangan
 
-Backup sebelum perubahan infrastruktur harus mencakup konfigurasi service, workflow n8n, database n8n, manifest model, dan konfigurasi environment tanpa menyalin nilai secret ke dokumentasi publik.
+Cadangan sebelum perubahan mencakup konfigurasi layanan, alur n8n, basis data n8n, catatan model, dan konfigurasi lingkungan. Nilai rahasia tidak disalin ke dokumentasi publik.

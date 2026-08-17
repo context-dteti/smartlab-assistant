@@ -1,33 +1,33 @@
-# Endpoint dan Kontrak
+# Endpoint dan Format Data
 
-## Ringkasan endpoint
+## Ringkasan Endpoint
 
 Hostname konkret ditentukan oleh deployment dan sengaja tidak ditulis pada dokumentasi publik.
 
-| Layanan | Transport | Path / interface | Authentication |
+| Layanan | Koneksi | Path / antarmuka | Autentikasi |
 | --- | --- | --- | --- |
 | STT | WSS | `/ws/audio` | Header token saat handshake |
 | n8n voice webhook | HTTPS | `/api/smartlab-voice` atau path webhook aktif | Header token webhook |
-| Local SLM | HTTPS/HTTP internal | OpenAI-compatible chat/completions | Bearer token |
+| SLM lokal | HTTPS/HTTP internal | OpenAI-compatible chat/completions | Bearer token |
 | Piper TTS | HTTPS/HTTP internal | `/synthesize` | Bearer token terpisah |
 | Home Assistant | HTTPS | `/api/states` dan service API | Long-lived credential di n8n |
 
-## STT WebSocket
+## WebSocket STT
 
-### Client ke server
+### Perangkat ke Server
 
 Audio dikirim sebagai frame biner PCM mono 16 kHz signed 16-bit little-endian.
 
-### Server ke client
+### Server ke Perangkat
 
 | Pesan | Makna |
 | --- | --- |
-| `PROCESSING` | Server mendeteksi akhir utterance dan mulai transkripsi/inference |
+| `PROCESSING` | Server mendeteksi pengguna selesai berbicara dan mulai memproses audio |
 | `AI_REPLY:<text>` | Respons akhir tersedia |
 
 Koneksi tanpa token valid harus ditolak pada handshake.
 
-## Voice webhook
+## Webhook Perintah Suara
 
 Contoh body konseptual:
 
@@ -37,17 +37,17 @@ Contoh body konseptual:
 }
 ```
 
-Respons workflow berisi teks final dan metadata eksekusi yang telah disanitasi. Nama field produksi dapat berkembang; client tidak boleh mengandalkan nilai internal yang tidak didokumentasikan.
+Respons alur n8n berisi teks akhir dan informasi eksekusi yang aman untuk dikirim kembali. Perangkat klien hanya menggunakan field yang telah didokumentasikan.
 
-## Local SLM
+## SLM Lokal
 
-Request mengikuti kontrak OpenAI-compatible dan memuat:
+Permintaan mengikuti format OpenAI-compatible dan memuat:
 
-- `messages` dengan system context dan query.
-- `tools` berisi empat native function tool.
-- Batas output pendek dan decoding deterministik untuk evaluasi.
+- `messages` berisi konteks sistem dan perintah pengguna.
+- `tools` berisi empat fungsi SmartLab.
+- Batas keluaran pendek dan pengaturan konsisten untuk evaluasi.
 
-Contoh tool call konseptual:
+Contoh pemanggilan fungsi:
 
 ```json
 {
@@ -59,23 +59,23 @@ Contoh tool call konseptual:
 }
 ```
 
-Identifier contoh bukan entity produksi.
+Identitas perangkat pada contoh bukan entitas produksi.
 
 ## Piper TTS
 
-Request membawa teks final yang telah disanitasi. Respons sehat menggunakan media type audio dan body WAV non-empty. TTS tidak memiliki wewenang untuk memanggil Home Assistant.
+Permintaan membawa teks akhir yang telah diperiksa. Respons yang benar berupa audio WAV yang tidak kosong. TTS tidak memiliki akses untuk memanggil Home Assistant.
 
 ## Home Assistant
 
-n8n membaca state lalu memanggil service hanya setelah proposal melewati validator. Credential Home Assistant tidak pernah dikirim kepada SLM atau voice satellite.
+n8n membaca status perangkat, lalu memanggil layanan setelah hasil model lolos pemeriksaan. Kredensial Home Assistant tidak pernah dikirim kepada SLM atau perangkat suara.
 
-## Respons error
+## Respons Kesalahan
 
 | Status | Makna umum | Respons client |
 | --- | --- | --- |
-| `400` | Payload tidak valid | Perbaiki format; jangan retry tanpa perubahan |
-| `401/403` | Authentication gagal | Hentikan request dan periksa secret injection |
-| `404` | Path tidak tersedia | Verifikasi endpoint aktif |
-| `413` | Request terlalu besar | Kurangi payload/audio |
-| `429` | Rate limit | Backoff tanpa mengulang aktuasi |
-| `5xx` | Service gagal | Fail closed dan catat trace |
+| `400` | Data tidak valid | Perbaiki format; jangan kirim ulang tanpa perubahan |
+| `401/403` | Autentikasi gagal | Hentikan permintaan dan periksa token layanan |
+| `404` | Path tidak tersedia | Pastikan endpoint yang digunakan aktif |
+| `413` | Permintaan terlalu besar | Kurangi ukuran data atau audio |
+| `429` | Terlalu banyak permintaan | Tunggu sebelum mencoba kembali dan jangan mengulang aktuasi |
+| `5xx` | Layanan mengalami gangguan | Hentikan aktuasi dan catat `trace_id` |

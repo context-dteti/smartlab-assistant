@@ -1,10 +1,10 @@
 # Speech-to-Text
 
-## Peran layanan
+## Peran Layanan
 
-Layanan Speech-to-Text menerima frame PCM dari voice satellite, mendeteksi akhir utterance, menjalankan transkripsi Bahasa Indonesia, dan meneruskan hasilnya ke orkestrator.
+Layanan Speech-to-Text menerima potongan audio PCM dari Raspberry Pi, mendeteksi akhir ucapan, mengubah ucapan Bahasa Indonesia menjadi teks, lalu meneruskannya ke n8n.
 
-## Konfigurasi konseptual
+## Konfigurasi Utama
 
 | Bagian | Implementasi |
 | --- | --- |
@@ -15,7 +15,7 @@ Layanan Speech-to-Text menerima frame PCM dari voice satellite, mendeteksi akhir
 | Transport | Secure WebSocket |
 | Output | Query teks per utterance |
 
-## Pesan sesi
+## Pesan Selama Sesi
 
 | Arah | Pesan | Fungsi |
 | --- | --- | --- |
@@ -24,12 +24,12 @@ Layanan Speech-to-Text menerima frame PCM dari voice satellite, mendeteksi akhir
 | STT → client | `AI_REPLY:<text>` | Mengirim jawaban akhir untuk status sesi |
 | STT → n8n | JSON query | Memulai workflow orkestrasi |
 
-## Failure behavior
+## Penanganan Kegagalan
 
 - Transkrip kosong tidak boleh memanggil aktuator.
-- Kegagalan webhook harus menghasilkan respons error yang jelas, bukan retry aktuasi tanpa batas.
+- Kegagalan webhook harus menghasilkan pesan yang jelas dan tidak boleh mengulang aktuasi tanpa batas.
 - Token WebSocket divalidasi saat handshake.
-- Buffer audio harus dibatasi agar request berukuran tidak wajar ditolak.
+- Ukuran audio harus dibatasi agar kiriman yang terlalu besar dapat ditolak.
 
 !!! info "Screenshot yang dibutuhkan"
     Tambahkan cuplikan log anonim: model berhasil dimuat, WebSocket diterima, dan satu transkripsi berhasil. Hapus hostname, IP, token, dan path home.

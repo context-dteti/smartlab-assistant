@@ -1,8 +1,8 @@
-# Voice Satellite
+# Perangkat Suara (Raspberry Pi)
 
-## Tanggung jawab
+## Peran Perangkat
 
-Voice satellite adalah perangkat edge yang selalu siap mendeteksi wake word, membuka sesi rekaman, mengirim audio, dan memberi umpan balik LED. Pemrosesan wake word berlangsung lokal sehingga audio standby tidak perlu terus dikirim ke core node.
+Raspberry Pi bertugas mendeteksi wake word, merekam suara, mengirim audio, dan menampilkan status melalui LED. Wake word diproses langsung pada Raspberry Pi sehingga audio saat siaga tidak terus-menerus dikirim ke komputer utama.
 
 ## Komponen
 
@@ -14,24 +14,24 @@ Voice satellite adalah perangkat edge yang selalu siap mendeteksi wake word, mem
 | SPI status LED | Standby, listening, processing, dan error |
 | Systemd service | Menjaga client aktif setelah reboot |
 
-## Alur lokal
+## Alur pada Raspberry Pi
 
 ```mermaid
 flowchart TB
-    accTitle: Alur Voice Satellite
+    accTitle: Alur Perangkat Suara
     accDescr: Proses lokal dari pemantauan wake word hingga streaming audio dan pemulihan sesi
 
-    standby([Standby]) --> detect{Omega terdeteksi?}
+    standby([Siaga]) --> detect{Omega terdeteksi?}
     detect -->|Belum| standby
     detect -->|Ya| listen[Buka sesi audio]
     listen --> stream[Kirim PCM 16 kHz]
-    stream --> processing[Tunggu pemrosesan]
-    processing --> ready([Kembali siap])
+    stream --> processing[Tunggu hasil]
+    processing --> ready([Kembali siaga])
     processing -->|Koneksi gagal| reconnect[Hubungkan ulang]
     reconnect --> standby
 ```
 
-## Uji yang disarankan
+## Pengujian yang Disarankan
 
 - Recall Omega pada variasi pembicara, jarak, tempo, dan kebisingan.
 - False activations per hour pada audio negatif kontinu.
@@ -40,4 +40,4 @@ flowchart TB
 - Kualitas audio 16 kHz mono pada perangkat ReSpeaker asli.
 
 !!! info "Screenshot yang dibutuhkan"
-    Tambahkan foto voice satellite lengkap dan close-up ReSpeaker/LED. Pastikan tidak ada label jaringan atau credential yang terlihat.
+    Tambahkan foto Raspberry Pi, ReSpeaker, dan LED. Pastikan tidak ada label jaringan atau kredensial yang terlihat.

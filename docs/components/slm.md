@@ -1,28 +1,28 @@
-# Decision Engine SLM
+# Small Language Model (SLM)
 
-## Peran model
+## Peran Model
 
-Small Language Model menerima konteks state Home Assistant, query pengguna, dan empat native function tool. Model menghasilkan respons teks, tool call, atau keduanya. Ia tidak menjalankan perangkat secara langsung; keputusan tetap melewati validator n8n.
+SLM menerima kondisi perangkat dari Home Assistant, permintaan pengguna, dan empat fungsi yang tersedia. Model dapat menghasilkan jawaban teks, memilih fungsi, atau melakukan keduanya. Model tidak mengendalikan perangkat secara langsung karena hasilnya selalu diperiksa oleh n8n.
 
-## Native function tools
+## Fungsi yang Tersedia
 
-| Tool | Tujuan | Contoh argumen |
+| Fungsi | Tujuan | Contoh parameter |
 | --- | --- | --- |
 | `HassTurnOn` | Menyalakan entitas yang diizinkan | `name` |
 | `HassTurnOff` | Mematikan entitas yang diizinkan | `name` |
 | `HassLightSet` | Mengatur satu atribut lampu | `name` + brightness, color, atau color temperature |
 | `HassSetTemperature` | Mengatur target suhu AC | `name` + `temperature` |
 
-Mapping tool logis ke scene atau service Home Assistant berada pada executor. Dengan demikian, dataset dan model tidak terikat langsung pada detail deployment fisik.
+n8n menerjemahkan fungsi tersebut menjadi scene atau layanan Home Assistant. Dengan cara ini, model tidak perlu mengetahui detail instalasi perangkat.
 
-## Bentuk input
+## Bentuk Input
 
 Input model mencakup:
 
 1. Instruksi domain dan aturan keselamatan.
-2. Ringkasan state perangkat yang masuk allowlist.
+2. Ringkasan kondisi perangkat yang diizinkan.
 3. Query pengguna hasil STT.
-4. Schema native function tool.
+4. Format fungsi yang dapat digunakan.
 
 ```text
 Konteks perangkat:
@@ -33,14 +33,14 @@ Permintaan pengguna:
 "ruangan terasa panas"
 ```
 
-## Batas keputusan
+## Batas Keputusan
 
 - Maksimal satu aksi per utterance pada kontrak saat ini.
-- Entity wajib berada dalam allowlist.
+- Perangkat tujuan wajib berada dalam daftar yang diizinkan.
 - `HassLightSet` menggunakan satu atribut perubahan pada satu tool call.
 - State sudah sesuai harus menghasilkan no-tool.
 - Permintaan di luar domain tidak boleh dieksekusi.
 
-## Lifecycle model
+## Training dan Model Terpasang
 
-Checkpoint HF-F16 dipakai untuk training dan evaluasi referensi. Deployment core menggunakan artifact GGUF yang telah melewati konversi, kuantisasi, preflight load, frozen evaluation, dan smoke test. Angka HF tidak boleh dilaporkan sebagai angka Q4 karena format dan runtime berbeda.
+Training dan evaluasi referensi menggunakan checkpoint HF-F16 pada komputer terpisah. Model yang dipasang pada komputer utama menggunakan format GGUF. Hasil HF-F16 dan Q4 dilaporkan secara terpisah karena format serta cara menjalankannya berbeda.

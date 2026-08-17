@@ -1,32 +1,32 @@
 # Home Assistant
 
-## Peran gateway IoT
+## Peran Home Assistant
 
-Home Assistant menjadi sumber state perangkat dan satu-satunya gateway aktuasi pada prototipe. Local SLM tidak mengetahui credential maupun memanggil API Home Assistant secara langsung.
+Home Assistant menyimpan status perangkat dan menjadi satu-satunya jalur untuk mengendalikan perangkat pada prototipe. SLM tidak menerima kredensial dan tidak memanggil API Home Assistant secara langsung.
 
-## Pembacaan state
+## Membaca Status Perangkat
 
-n8n mengambil state dan atribut, lalu memfilter hanya entitas yang tercantum pada inventaris logis. Konteks yang dikirim ke model sebaiknya membedakan:
+n8n mengambil status dan atribut, lalu memilih hanya perangkat yang tercantum dalam inventaris. Informasi yang dikirim ke model membedakan:
 
 - `on`, `off`, dan `unavailable`.
 - Nilai sensor beserta unitnya.
 - Brightness, warna, dan color temperature aktual.
-- Target temperature dan mode HVAC.
+- Target suhu dan mode AC.
 
-Nilai yang tidak tersedia tidak boleh diam-diam diganti dengan angka sintetis karena dapat mengubah keputusan already-state.
+Nilai yang tidak tersedia tidak boleh diganti dengan angka buatan karena dapat membuat model salah mengira kondisi perangkat sudah sesuai.
 
-## Aktuasi
+## Mengendalikan Perangkat
 
 | Proposal logis | Bentuk eksekusi |
 | --- | --- |
-| Turn on/off | Service domain entity |
-| Atur brightness/warna/color temperature | Service lampu dengan satu perubahan yang tervalidasi |
-| Atur suhu AC | Service climate dengan rentang aman |
-| Mode gabungan tertentu | Scene yang dipetakan pada executor |
+| Menyalakan atau mematikan | Layanan sesuai jenis perangkat |
+| Mengatur tingkat terang, warna, atau suhu warna | Layanan lampu dengan satu perubahan yang telah diperiksa |
+| Mengatur suhu AC | Layanan AC dengan rentang aman |
+| Beberapa perubahan yang telah ditentukan | Scene Home Assistant |
 
 ## Verifikasi
 
-Respons API menunjukkan bahwa Home Assistant menerima service call. Untuk klaim keberhasilan fisik, pengujian demonstrasi perlu mengamati perangkat atau membaca state sesudah aktuasi.
+Respons API menunjukkan bahwa Home Assistant menerima perintah. Untuk memastikan perubahan benar-benar terjadi, perangkat perlu diamati atau statusnya dibaca kembali setelah aktuasi.
 
 !!! info "Screenshot yang dibutuhkan"
     Tambahkan dashboard Home Assistant yang hanya menampilkan entitas SmartLab. Hindari menu credential, token, alamat internal, dan integrasi administratif.

@@ -1,64 +1,64 @@
-# Monitoring dan Troubleshooting
+# Pemantauan dan Penanganan Masalah
 
-## Health check minimum
+## Pemeriksaan Dasar
 
 | Komponen | Pemeriksaan | Hasil sehat |
 | --- | --- | --- |
-| Voice satellite | Journal service | Model Omega load dan standby |
-| STT | Status service dan handshake WSS | Service aktif, handshake authorized diterima |
-| n8n | Container dan workflow | Container sehat, workflow aktif |
-| Local SLM | Health endpoint dan log model | HTTP sukses, model dan GPU layer termuat |
-| Home Assistant | State read dengan credential n8n | Daftar state valid |
-| TTS | Request teks uji | WAV non-empty |
-| Audio player | Journal dan playback | Satu file diputar satu kali |
+| Perangkat suara | Log layanan | Model Omega dimuat dan perangkat dalam keadaan siaga |
+| STT | Status layanan dan koneksi WSS | Layanan aktif dan token diterima |
+| n8n | Container dan alur kerja | Container sehat dan alur kerja aktif |
+| SLM lokal | Endpoint status dan log model | HTTP berhasil, model dan lapisan GPU termuat |
+| Home Assistant | Pembacaan status dengan kredensial n8n | Daftar status perangkat dapat dibaca |
+| TTS | Permintaan teks uji | File WAV berisi audio |
+| Pemutar audio | Log layanan dan pemutaran | Satu file diputar satu kali |
 
-## Trace satu request
+## Menelusuri Satu Permintaan
 
-Satu `trace_id` sebaiknya mengikuti permintaan dari STT, n8n, SLM, Home Assistant, TTS, hingga playback. Catat timestamp berikut tanpa menyimpan audio atau query sensitif lebih lama dari yang diperlukan:
+Satu `trace_id` sebaiknya mengikuti permintaan dari STT, n8n, SLM, Home Assistant, TTS, hingga suara diputar. Catat waktu pada tahap berikut tanpa menyimpan audio atau isi perintah sensitif lebih lama dari yang diperlukan:
 
-- Wake word dan mulai capture.
-- End-of-speech dan selesai STT.
-- Context build dan inference.
-- Validasi dan Home Assistant call.
-- TTS selesai dan time-to-first-audio.
+- Wake word terdeteksi dan perekaman dimulai.
+- Pengguna selesai berbicara dan transkripsi selesai.
+- Konteks disusun dan model memproses perintah.
+- Hasil diperiksa dan Home Assistant dipanggil.
+- TTS selesai dan suara mulai diputar.
 
-## Masalah umum
+## Masalah Umum
 
-### Wake word tidak konsisten
+### Wake Word Tidak Konsisten
 
-1. Periksa gain dan device input ReSpeaker.
-2. Bandingkan skor maksimum dengan threshold aktif.
-3. Uji jarak, pembicara, dan noise secara terpisah.
-4. Jangan langsung menurunkan threshold tanpa mengukur false activations per hour.
+1. Periksa penguatan suara dan perangkat input ReSpeaker.
+2. Bandingkan skor tertinggi dengan ambang deteksi yang digunakan.
+3. Uji jarak, pembicara, dan kebisingan secara terpisah.
+4. Jangan langsung menurunkan ambang tanpa mengukur jumlah aktivasi yang keliru.
 
-### STT terhubung tetapi workflow tidak berjalan
+### STT Terhubung tetapi Alur n8n Tidak Berjalan
 
 1. Pastikan query hasil transkripsi tidak kosong.
-2. Periksa header auth webhook.
-3. Verifikasi URL production webhook, bukan test webhook yang tidak aktif.
-4. Korelasikan log STT dan execution n8n menggunakan waktu/trace ID.
+2. Periksa token pada header webhook.
+3. Pastikan URL yang digunakan adalah webhook produksi yang aktif.
+4. Cocokkan log STT dan eksekusi n8n menggunakan waktu atau `trace_id`.
 
-### SLM menjawab teks tanpa tool call
+### SLM Menjawab Teks tanpa Memanggil Fungsi
 
-1. Pastikan prompt, chat template, dan schema tool sesuai kontrak training.
-2. Periksa backend endpoint dan mode native tool call.
-3. Bandingkan HF dan GGUF menggunakan frozen input yang sama.
-4. Jangan menganggap teks aksi sebagai aktuasi berhasil pada strict evaluation.
+1. Pastikan prompt, template percakapan, dan skema fungsi sesuai dengan data training.
+2. Periksa endpoint model dan mode pemanggilan fungsi.
+3. Bandingkan model HF dan GGUF menggunakan data uji yang sama.
+4. Teks yang menyebut aksi belum dianggap sebagai aktuasi jika tidak ada pemanggilan fungsi yang valid.
 
-### Home Assistant tidak berubah
+### Status Home Assistant Tidak Berubah
 
-1. Periksa apakah workflow berada pada dry-run.
-2. Periksa hasil validator dan entity allowlist.
-3. Verifikasi service/domain serta payload data.
+1. Periksa apakah alur sedang berjalan dalam mode uji tanpa aktuasi.
+2. Periksa hasil validator dan daftar entitas yang diizinkan.
+3. Periksa layanan, domain, dan data yang dikirim.
 4. Baca kembali state dan observasi perangkat fisik.
 
-### Jawaban suara tidak terdengar
+### Jawaban Suara Tidak Terdengar
 
-1. Pastikan TTS mengembalikan WAV non-empty.
-2. Periksa shared output path dan permission.
-3. Periksa journal audio player serta ALSA device.
+1. Pastikan TTS menghasilkan file WAV yang berisi audio.
+2. Periksa lokasi file keluaran dan hak aksesnya.
+3. Periksa log pemutar audio dan perangkat ALSA.
 4. Jangan mengulang aktuasi hanya untuk memperbaiki audio.
 
-## Evidence insiden
+## Catatan Gangguan
 
-Simpan waktu, komponen, gejala, request ID, status health, dan tindakan pemulihan. Sensor token, credential, IP privat, dan isi query pengguna sebelum evidence dibagikan.
+Simpan waktu kejadian, komponen, gejala, ID permintaan, status layanan, dan tindakan pemulihan. Samarkan token, kredensial, IP privat, dan isi perintah pengguna sebelum catatan dibagikan.

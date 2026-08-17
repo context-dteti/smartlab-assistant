@@ -9,8 +9,8 @@ SmartLab adalah prototipe asisten suara Bahasa Indonesia untuk pengendalian dan 
 - Aktivasi tanpa sentuhan melalui wake word **Omega**.
 - Transkripsi ucapan Bahasa Indonesia secara lokal.
 - Pemahaman perintah eksplisit dan keluhan kontekstual terbatas.
-- Pemeriksaan state perangkat sebelum menentukan aksi.
-- Validasi deterministik sebelum aktuasi Home Assistant.
+- Pemeriksaan status perangkat sebelum menentukan aksi.
+- Pemeriksaan aturan sebelum perintah dikirim ke Home Assistant.
 - Jawaban suara menggunakan Text-to-Speech lokal.
 
 ## Gambaran Sistem
@@ -23,14 +23,14 @@ SmartLab adalah prototipe asisten suara Bahasa Indonesia untuk pengendalian dan 
 ## Urutan Membaca
 
 1. Mulai dari [Gambaran umum](getting-started/overview.md).
-2. Pahami [Arsitektur](system/architecture.md) dan [Alur runtime](system/runtime-flow.md).
+2. Pahami [Arsitektur Sistem](system/architecture.md) dan [Alur Proses](system/runtime-flow.md).
 3. Buka [Orkestrasi n8n](components/n8n.md) untuk fungsi setiap node.
-4. Gunakan [Deployment dan rollback](operations/deployment.md) saat mengoperasikan prototipe.
-5. Periksa [Dataset dan evaluasi](models/dataset-evaluation.md) sebelum mengutip hasil riset.
+4. Gunakan [Pemasangan Model dan Pemulihan](operations/deployment.md) saat mengoperasikan prototipe.
+5. Periksa [Model dan Evaluasi](models/dataset-evaluation.md) sebelum mengutip hasil riset.
 
 ## Batas Dokumentasi Publik
 
-Dokumentasi ini menjelaskan desain dan perilaku prototipe tanpa memuat password, token, alamat IP internal, credential ID, dump database, atau konfigurasi rahasia. Nilai operasional sensitif disimpan terpisah dan hanya tersedia bagi personel berwenang.
+Dokumentasi ini menjelaskan desain dan perilaku prototipe tanpa memuat kata sandi, token, alamat IP internal, ID kredensial, salinan basis data, atau konfigurasi rahasia. Nilai operasional sensitif disimpan terpisah dan hanya tersedia bagi personel berwenang.
 
 ---
 
