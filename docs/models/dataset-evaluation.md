@@ -48,8 +48,6 @@ Generator menolak kalimat yang terdengar dibuat-buat, sapaan yang tidak diperluk
 | --- | --- | ---: | ---: | ---: | --- |
 | Baseline candidate HF-F16 | Frozen 800 | 100,0% | 100,0% | 100,0% | False execution 0/400 |
 | Baseline candidate Q4_K_M | Frozen 800 | 91,0% | 100,0% | 95,5% | 36 execute row tanpa native tool call |
-| Implisit seed 20260817 HF-F16 | Frozen 1.200 | 87,33% | 99,33% | 93,33% | Behavioral 96,92%; 4 false execution |
-| Implisit seed 20260817 Q4_K_M | Frozen 1.200 | — | 95,5% | — | Behavioral 94,08%; 27 false execution |
 | Implisit dari baseline candidate HF-F16 | Frozen 1.200 | 90,17% | 100,0% | 95,08% | Behavioral 98,75%; implicit 95%; already-state 100%; false execution 0/600 |
 | Implisit dari baseline candidate Q4_K_M | Frozen 1.200 | 86,0% | 100,0% | 93,0% | Behavioral 98,33%; implicit 93,33%; false execution 0/600; belum dipasang |
 
@@ -61,25 +59,4 @@ Angka baseline candidate dan kandidat implisit pada tabel telah dicocokkan denga
 | Implisit dari baseline candidate | 1.200 | sekitar 505 MB | Evaluasi kanonik selesai; belum dipasang |
 
 !!! warning "Cara mengutip hasil"
-    Jangan menggunakan angka HF-F16 untuk mengklaim performa Q4. Jangan memakai BERTScore sebagai pengganti keberhasilan tool call atau keselamatan aktuasi. Model implisit Q4 yang terakhir terverifikasi aktif merupakan model seed 20260817; kandidat baru pada tabel belum dipasang.
-
-## Tahapan Model Kandidat
-
-```mermaid
-flowchart LR
-    accTitle: Tahapan Model SmartLab
-    accDescr: Tahapan dari penetapan aturan dan dataset menuju training, evaluasi, kuantisasi, pengujian, pemasangan, dan pemulihan model
-
-    contract[Tetapkan aturan] --> dataset[Bangun dataset]
-    dataset --> train[Fine-tuning]
-    train --> hf_eval[Evaluasi HF]
-    hf_eval -->|Lulus| export[Ekspor GGUF]
-    hf_eval -->|Gagal| revise[Revisi data]
-    revise --> dataset
-    export --> q4_eval[Evaluasi Q4]
-    q4_eval --> gate{Memenuhi syarat?}
-    gate -->|Ya| deploy[Pasang secara terkontrol]
-    gate -->|Tidak| hold[Tahan kandidat]
-    deploy --> monitor[Uji fungsi dan pantau]
-    monitor --> rollback[Pulihkan model lama bila bermasalah]
-```
+    Jangan menggunakan angka HF-F16 untuk mengklaim performa Q4. Jangan memakai BERTScore sebagai pengganti keberhasilan tool call atau keselamatan aktuasi. Ketersediaan artifact kandidat tidak berarti model tersebut sudah menjadi model aktif.

@@ -35,6 +35,7 @@ theme:
 nav:
   - Beranda: index.md
   - Gambaran Umum: getting-started/overview.md
+  - Instalasi: getting-started/installation.md
   - Cara Kerja:
       - Arsitektur Sistem: system/architecture.md
       - Alur Proses: system/runtime-flow.md
@@ -48,7 +49,7 @@ nav:
       - Text-to-Speech (TTS): components/tts.md
   - Model dan Evaluasi: models/dataset-evaluation.md
   - Operasional:
-      - Pemasangan Model dan Pemulihan: operations/deployment.md
+      - Mengganti dan Memulihkan Model: operations/deployment.md
       - Pemantauan dan Penanganan Masalah: operations/monitoring-troubleshooting.md
   - Demonstrasi Video: demo/video-scenarios.md
   - Referensi:
