@@ -1,8 +1,8 @@
 site_name: Dokumentasi Prototipe SmartLab
 site_description: Dokumentasi arsitektur, komponen, operasi, dan evaluasi prototipe asisten suara privat SmartLab.
-site_url: https://context-dteti.github.io/smartlab-assistant.github.io/
-repo_url: https://github.com/context-dteti/smartlab-assistant.github.io
-repo_name: context-dteti/smartlab-assistant.github.io
+site_url: https://context.my.id/smartlab-assistant/
+repo_url: https://github.com/context-dteti/smartlab-assistant
+repo_name: context-dteti/smartlab-assistant
 edit_uri: edit/main/docs/
 
 theme:
@@ -58,6 +58,9 @@ nav:
 
 plugins:
   - search
+  - git-revision-date-localized:
+      type: date
+      enable_creation_date: false
 
 markdown_extensions:
   - admonition
@@ -76,4 +79,5 @@ markdown_extensions:
 extra_css:
   - stylesheets/extra.css
 
-copyright: Dokumentasi prototipe SmartLab — material publik tanpa rahasia operasional.
+extra:
+  generator: false

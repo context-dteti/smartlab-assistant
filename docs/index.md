@@ -28,10 +28,6 @@ SmartLab adalah prototipe asisten suara Bahasa Indonesia untuk pengendalian dan 
 4. Gunakan [Pemasangan Model dan Pemulihan](operations/deployment.md) saat mengoperasikan prototipe.
 5. Periksa [Model dan Evaluasi](models/dataset-evaluation.md) sebelum mengutip hasil riset.
 
-## Batas Dokumentasi Publik
+## Isi Dokumentasi
 
-Dokumentasi ini menjelaskan desain dan perilaku prototipe tanpa memuat kata sandi, token, alamat IP internal, ID kredensial, salinan basis data, atau konfigurasi rahasia. Nilai operasional sensitif disimpan terpisah dan hanya tersedia bagi personel berwenang.
-
----
-
-_Status dokumentasi: draf publik, 17 Agustus 2026._
+Dokumentasi ini menjelaskan desain, komponen, cara kerja, evaluasi model, dan pengoperasian prototipe SmartLab. Kata sandi, token, alamat IP internal, ID kredensial, salinan basis data, dan konfigurasi rahasia tidak dicantumkan.
