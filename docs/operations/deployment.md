@@ -19,7 +19,7 @@ Satu paket model sekurang-kurangnya memuat:
 
 1. Cocokkan checksum file sumber dan tujuan.
 2. Pastikan model dapat dimuat tanpa mengubah layanan aktif.
-3. Cadangkan konfigurasi layanan dan catat lokasi model lama.
+3. Catat lokasi model lama dan jangan menghapus file tersebut.
 4. Ubah hanya lokasi model pada konfigurasi layanan.
 5. Muat ulang konfigurasi dan mulai ulang layanan SLM.
 6. Periksa status layanan dan log pemuatan GPU.
@@ -41,15 +41,7 @@ systemctl cat <NAMA_SERVICE_SLM>
 
 Pastikan checksum cocok dengan manifest ekspor dan catat file yang sedang dipakai pada argumen `--model`.
 
-### 2. Cadangkan konfigurasi service
-
-```bash
-sudo cp <FILE_SERVICE> <FILE_SERVICE>.backup
-```
-
-Simpan model lama. Jangan mengganti atau menghapus file tersebut sebelum model baru selesai diuji.
-
-### 3. Ubah lokasi model
+### 2. Ubah lokasi model
 
 ```bash
 sudo systemctl edit --full <NAMA_SERVICE_SLM>
@@ -57,7 +49,7 @@ sudo systemctl edit --full <NAMA_SERVICE_SLM>
 
 Pada baris `ExecStart`, ubah hanya nilai setelah `--model` menjadi lokasi GGUF baru. Argumen port, context size, GPU layers, jumlah thread, template, dan autentikasi tetap dipertahankan.
 
-### 4. Mulai ulang dan periksa
+### 3. Mulai ulang dan periksa
 
 ```bash
 sudo systemctl daemon-reload
@@ -68,7 +60,7 @@ journalctl -u <NAMA_SERVICE_SLM> -n 100 --no-pager
 
 Model dinyatakan berhasil dimuat jika service tetap aktif, tidak ada error tensor atau kehabisan memori, dan health check layanan memberikan respons normal.
 
-### 5. Uji tanpa aktuasi
+### 4. Uji tanpa aktuasi
 
 Jalankan mode dry-run untuk perintah eksplisit, pertanyaan status, keluhan implisit, kondisi yang sudah sesuai, dan permintaan di luar domain. Uji fisik dilakukan setelah hasil dry-run diperiksa.
 
@@ -93,7 +85,3 @@ Alamat perangkat, nama pengguna, dan lokasi file internal disimpan dalam panduan
 - Validator menerima argumen di luar kontrak.
 - Waktu respons atau penggunaan memori mengganggu layanan lain.
 - TTS gagal dan menimbulkan pengulangan alur yang tidak aman.
-
-## Cadangan
-
-Cadangan sebelum perubahan mencakup konfigurasi layanan, alur n8n, basis data n8n, catatan model, dan konfigurasi lingkungan. Nilai rahasia tidak disalin ke dokumentasi publik.

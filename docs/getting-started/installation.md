@@ -2,6 +2,17 @@
 
 SmartLab terdiri dari beberapa layanan yang berjalan pada perangkat berbeda. Instalasi dilakukan per komponen, kemudian seluruh jalur diuji dari perangkat suara sampai Home Assistant.
 
+## Panduan Teknis
+
+Halaman ini menjelaskan urutan pemasangan secara umum. Perintah terminal, template `systemd`, contoh environment file, Docker Compose, workflow n8n, dan pemeriksaan instalasi tersedia di repository runtime privat:
+
+- [SmartLab Assistant Runtime](https://github.com/context-dteti/smartlab-assistant-runtime)
+- [Panduan instalasi runtime](https://github.com/context-dteti/smartlab-assistant-runtime/blob/main/docs/installation.md)
+- [Konfigurasi workflow n8n](https://github.com/context-dteti/smartlab-assistant-runtime/blob/main/docs/n8n-workflow.md)
+- [Pemeriksaan setelah instalasi](https://github.com/context-dteti/smartlab-assistant-runtime/blob/main/docs/verification.md)
+
+Akses repository diberikan kepada pengembang dan operator SmartLab. Model, token, password, dan konfigurasi yang terisi tidak disimpan di repository.
+
 ## Perangkat yang Diperlukan
 
 | Perangkat | Kebutuhan utama |
@@ -9,7 +20,7 @@ SmartLab terdiri dari beberapa layanan yang berjalan pada perangkat berbeda. Ins
 | Raspberry Pi 3B | ReSpeaker 2-Mic HAT, LED status, dan koneksi jaringan |
 | Komputer utama | NVIDIA Jetson Orin NX, penyimpanan model, dan speaker |
 | Home Assistant | Host yang sudah terhubung dengan perangkat laboratorium |
-| Komputer training | GPU terpisah untuk fine-tuning dan ekspor model |
+| Komputer training (opsional) | GPU terpisah jika model akan dilatih atau diekspor ulang |
 
 ## Perangkat Lunak
 
@@ -31,7 +42,7 @@ Hubungkan perangkat laboratorium ke Home Assistant, lalu pastikan setiap entitas
 
 ### 2. Siapkan komputer utama
 
-Pasang runtime untuk STT, `llama-server`, n8n, dan Piper TTS. Setiap layanan dijalankan melalui service system agar aktif kembali setelah reboot. Simpan token layanan pada environment file dengan izin terbatas, bukan di source code.
+Pasang runtime untuk STT, `llama-server`, n8n, dan Piper TTS mengikuti [panduan instalasi runtime](https://github.com/context-dteti/smartlab-assistant-runtime/blob/main/docs/installation.md). Setiap layanan dijalankan melalui `systemd` atau Docker Compose agar aktif kembali setelah reboot. Simpan token layanan pada environment file dengan izin terbatas, bukan di source code.
 
 ### 3. Pasang model SLM
 
@@ -39,7 +50,7 @@ Salin model GGUF yang telah dievaluasi ke direktori model. Cocokkan checksum SHA
 
 ### 4. Impor workflow n8n
 
-Impor workflow SmartLab, hubungkan credential Home Assistant, lalu isi endpoint STT, SLM, dan TTS menggunakan konfigurasi lingkungan. Jalankan workflow dalam mode dry-run sebelum mengizinkan aktuasi.
+Impor workflow SmartLab dari repository runtime, hubungkan credential Home Assistant, lalu isi endpoint SLM dan TTS menggunakan konfigurasi lingkungan. Jalankan workflow dalam mode dry-run sebelum mengizinkan aktuasi.
 
 ### 5. Siapkan perangkat suara
 
@@ -48,6 +59,10 @@ Pasang ReSpeaker pada Raspberry Pi, periksa input dan output audio, lalu instal 
 ### 6. Hubungkan layanan
 
 Gunakan token berbeda untuk jalur perangkat suara ke STT, STT ke n8n, n8n ke SLM, dan n8n ke TTS. Jangan menaruh token pada dokumentasi, screenshot, atau repository publik.
+
+## Training Model
+
+Training tidak diperlukan untuk menjalankan prototipe apabila model Wake Word, STT, SLM, dan TTS yang sudah dievaluasi telah tersedia. Proses training dilakukan pada lingkungan GPU terpisah; Jetson hanya menerima artefak model yang telah diperiksa dan siap digunakan. Ringkasan metode dan hasil SLM tersedia pada halaman [Model dan Evaluasi](../models/dataset-evaluation.md).
 
 ## Pemeriksaan Instalasi
 
@@ -63,4 +78,4 @@ Gunakan token berbeda untuk jalur perangkat suara ke STT, STT ke n8n, n8n ke SLM
 
 ## Informasi Konfigurasi
 
-Dokumentasi publik tidak menyertakan alamat internal, password, token, credential ID, atau lokasi file pada perangkat produksi. Nilai tersebut diisi oleh operator melalui environment file dan panduan internal saat deployment.
+Dokumentasi publik tidak menyertakan alamat internal, password, token, atau credential ID. Konfigurasi tersebut diisi oleh operator melalui environment file pada saat pemasangan.
