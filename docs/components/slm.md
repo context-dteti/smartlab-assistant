@@ -49,12 +49,12 @@ Model dasar yang digunakan adalah **Qwen3.5-0.8B**. Model tersebut disesuaikan u
 | --- | --- |
 | Model dasar | Qwen3.5-0.8B |
 | Kemampuan utama | Perintah eksplisit, pertanyaan status, dan keluhan implisit |
-| Model yang terakhir terverifikasi aktif | Model SmartLab implisit Q4_K_M |
+| Model yang terakhir terverifikasi aktif | Model implisit dari baseline candidate, GGUF Q4_K_M |
 | Runtime deployment | `llama.cpp` dengan akselerasi GPU |
-| Model cadangan | Baseline Q4_K_M |
-| Kandidat terbaru | Model implisit dari baseline candidate; sudah dievaluasi, belum dipasang |
+| Model cadangan terdekat | Baseline candidate Q4_K_M |
+| Model cadangan historis | Model SmartLab implisit Q4_K_M sebelumnya |
 
-Model aktif dan model kandidat dibedakan dengan jelas. Hasil kandidat tidak dianggap sebagai kemampuan sistem yang sedang berjalan sampai model tersebut dipasang dan diuji pada alur n8n.
+Model aktif dan model cadangan dibedakan dengan jelas. Model aktif telah lolos pemeriksaan load, health endpoint, dan smoke test lokal. Evaluasi melalui alur n8n serta uji fisik tetap dicatat terpisah dari evaluasi model offline.
 
 ## Metode Training
 
